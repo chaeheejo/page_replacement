@@ -1,5 +1,6 @@
 //
 //  LIFO.c
+//  Last In First Out
 //  page_replacement
 //
 //  Created by chaehee on 2022/11/15.
@@ -40,7 +41,8 @@ void LIFO(int* ref){
             printf("%5c\n", ' ');
     }
     
+    free(frame);
+    
     printf("\nTotal number of page fault %d\n", page_fault);
     printf("==LIFO simulation end==\n\n");
-    free(frame);
 }

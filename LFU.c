@@ -1,5 +1,6 @@
 //
 //  LFU.c
+//  Least Frequently Used
 //  page_replacement
 //
 //  Created by chaehee on 2022/11/15.
@@ -67,9 +68,10 @@ void LFU(int* ref){
         
     }
     
-    printf("\nTotal number of page fault %d\n", page_fault);
-    printf("==LFU simulation end==\n\n");
     free(frame);
     free(time);
     free(count);
+    
+    printf("\nTotal number of page fault %d\n", page_fault);
+    printf("==LFU simulation end==\n\n");
 }

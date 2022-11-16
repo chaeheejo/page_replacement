@@ -9,6 +9,6 @@
 #include "display.h"
 
 int main(int argc, const char * argv[]) {
-    user_menu();
+    display();
     return 0;
 }

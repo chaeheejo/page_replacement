@@ -9,16 +9,16 @@
 #define display_h
  
 #include <stdio.h>
-#include <string.h>
-#include <time.h>
 
 #include "FIFO.h"
 #include "LIFO.h"
 #include "LRU.h"
 #include "LFU.h"
+#include "Optimal.h"
+#include "SC.h"
+#include "ESC.h"
+#include "tools.h"
 
-void user_menu(void);
-int* get_random_input(void);
-int* get_file_input(void);
+void display(void);
 
 #endif /* display_h */

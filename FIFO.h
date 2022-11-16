@@ -9,7 +9,7 @@
 #define FIFO_h
  
 #include <stdio.h>
-#include "print_form.h"
+#include "tools.h"
 
 void FIFO(int* ref);
 

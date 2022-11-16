@@ -9,7 +9,7 @@
 #define LRU_h
  
 #include <stdio.h>
-#include "print_form.h"
+#include "tools.h"
 
 void LRU(int* ref);
 

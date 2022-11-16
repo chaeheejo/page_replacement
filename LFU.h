@@ -9,7 +9,7 @@
 #define LFU_h
  
 #include <stdio.h>
-#include "print_form.h"
+#include "tools.h"
 
 void LFU(int* ref);
 
