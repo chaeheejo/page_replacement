@@ -11,6 +11,6 @@
 #include <stdio.h>
 #include "tools.h"
 
-void OPTIMAL(int* ref);
+void OPTIMAL(int* ref, int output_flag, FILE* fp);
 
 #endif /* Optimal_h */

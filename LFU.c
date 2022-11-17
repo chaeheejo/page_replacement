@@ -8,11 +8,15 @@
 
 #include "LFU.h"
 
-extern int STREAM_SIZE;
+extern int REF_SIZE;
 extern int FRAME_SIZE;
 
-void LFU(int* ref){
+void LFU(int* ref, int output_flag, FILE* fp){
     printf("\n\n==LFU simulation start==\n\n");
+    
+    if(output_flag)
+        fprintf(fp, "\n\n==LFU simulation start==\n\n");
+    
     int page_fault=0;
     
     int* frame = (int*) calloc(FRAME_SIZE, sizeof(int));
@@ -22,7 +26,7 @@ void LFU(int* ref){
     int min_time=0, oldest=0;
     int frame_size=0, flag=0;
     
-    for(int i=0;i<STREAM_SIZE;i++){
+    for(int i=0;i<REF_SIZE;i++){
         count[ref[i]]++;
         time[ref[i]]=i;
         flag=0;
@@ -42,7 +46,7 @@ void LFU(int* ref){
                 flag=1;
             }
             else{
-                min_time = STREAM_SIZE;
+                min_time = REF_SIZE;
                 int tmp=0;
                 
                 for(int j=0;j<FRAME_SIZE;j++){  
@@ -59,12 +63,24 @@ void LFU(int* ref){
         }
         
         printf("#%-5d page : %-3d   frame :", i+1, ref[i]);
-        print_frame(frame);
         
-        if(flag)
+        if(output_flag)
+            fprintf(fp, "#%-5d page : %-3d   frame :", i+1, ref[i]);
+        
+        print_frame(frame, fp, output_flag);
+        
+        if(flag){
             printf("%5c\n", 'F');
-        else
+            
+            if(output_flag)
+                fprintf(fp, "%5c\n", 'F');
+        }
+        else{
             printf("%5c\n", ' ');
+            
+            if(output_flag)
+                fprintf(fp, "%5c\n", ' ');
+        }
         
     }
     
@@ -73,5 +89,10 @@ void LFU(int* ref){
     free(count);
     
     printf("\nTotal number of page fault %d\n", page_fault);
-    printf("==LFU simulation end==\n\n");
+    printf("==LFU simulation end==\n\n\n");
+    
+    if(output_flag){
+        fprintf(fp, "\nTotal number of page fault %d\n", page_fault);
+        fprintf(fp, "==LFU simulation end==\n\n\n");
+    }
 }

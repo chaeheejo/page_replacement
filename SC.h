@@ -11,6 +11,6 @@
 #include <stdio.h>
 #include "tools.h"
 
-void SC(int* ref);
+void SC(int* ref, int output_flag, FILE* fp);
 
 #endif /* SC_h */

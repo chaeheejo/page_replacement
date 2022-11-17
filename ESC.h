@@ -11,6 +11,6 @@
 #include <stdio.h>
 #include "tools.h"
 
-void ESC(int* ref);
+void ESC(int* ref, int output_flag, FILE* fp);
 
 #endif /* ESC_h */

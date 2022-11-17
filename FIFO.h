@@ -11,6 +11,6 @@
 #include <stdio.h>
 #include "tools.h"
 
-void FIFO(int* ref);
+void FIFO(int* ref, int output_flag, FILE* fp);
 
 #endif /* FIFO_h */

@@ -8,17 +8,21 @@
 
 #include "LRU.h"
 
-extern int STREAM_SIZE;
+extern int REF_SIZE;
 extern int FRAME_SIZE;
 
-void LRU(int* ref){
+void LRU(int* ref, int output_flag, FILE* fp){
     printf("\n\n==LRU simulation start==\n\n");
+    
+    if(output_flag)
+        fprintf(fp, "\n\n==LRU simulation start==\n\n");
+    
     int page_fault=0;
     
     int* frame = (int*) calloc(FRAME_SIZE, sizeof(int));
     
     int flag=0, cur=0, frame_size=0;
-    for(int i=0;i<STREAM_SIZE;i++){
+    for(int i=0;i<REF_SIZE;i++){
         flag=0;
         
         if((cur = is_exist(frame, ref[i]))==NOTFOUND){
@@ -47,16 +51,33 @@ void LRU(int* ref){
         }
         
         printf("#%-5d page : %-3d   frame :", i+1, ref[i]);
-        print_frame(frame);
         
-        if(flag)
+        if(output_flag)
+            fprintf(fp, "#%-5d page : %-3d   frame :", i+1, ref[i]);
+        
+        print_frame(frame, fp, output_flag);
+        
+        if(flag){
             printf("%5c\n", 'F');
-        else
+            
+            if(output_flag)
+                fprintf(fp, "%5c\n", 'F');
+        }
+        else{
             printf("%5c\n", ' ');
+            
+            if(output_flag)
+                fprintf(fp, "%5c\n", ' ');
+        }
     }
 
     free(frame);
     
     printf("\nTotal number of page fault %d\n", page_fault);
-    printf("==LRU simulation end==\n\n");
+    printf("==LRU simulation end==\n\n\n");
+    
+    if(output_flag){
+        fprintf(fp, "\nTotal number of page fault %d\n", page_fault);
+        fprintf(fp, "==LRU simulation end==\n\n\n");
+    }
 }

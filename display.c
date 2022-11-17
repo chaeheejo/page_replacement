@@ -7,7 +7,7 @@
 
 #include "display.h"
 
-extern int STREAM_SIZE;
+extern int REF_SIZE;
 extern int FRAME_SIZE;
 
 void display(void){
@@ -21,6 +21,11 @@ void display(void){
         
         int index=0, len=0;
         while (command[len]!=0) {
+            if(index>2){
+                printf("USAGE : maximum number of choices is 3\n");
+                exit(0);
+            }
+            
             if(command[len]>'0' && command[len]<'9'){
                 if(command[len+1]!=0){
                     if(command[len+1]==' ' && index<3){
@@ -43,11 +48,6 @@ void display(void){
                 exit(0);
             }
             len++;
-        }
-        
-        if(index==0){
-            printf("USAGE : please select simulator\n");
-            exit(0);
         }
         
         for(int i=0;i<=index;i++){
@@ -90,6 +90,18 @@ void display(void){
             exit(0);
         }
         
+        int random_size=0;
+        char file_name[20];
+        if(input_way==1){
+            printf("\nEnter number of string size\n>");
+            scanf("%d", &random_size);
+            REF_SIZE = random_size;
+        }
+        else{
+            printf("\nEnter file name\n>");
+            scanf(" %s", file_name);
+        }
+        
         int esc_flag=0;
         for(int i=0;i<=index;i++){
             if(simulator_num[i]=='8' || simulator_num[i]=='7'){
@@ -104,7 +116,7 @@ void display(void){
             if(input_way==1)
                 ref = get_random_input(0);
             else
-                ref = get_file_input(0);
+                ref = get_file_input(0, file_name);
         }
         else{
             if(input_way==1){
@@ -112,21 +124,21 @@ void display(void){
                 ref = convert_esc_to_normal(esc_ref);
             }
             else{
-                esc_ref = get_file_input(1);
+                esc_ref = get_file_input(1, file_name);
                 ref = convert_esc_to_normal(esc_ref);
             }
         }
         
-        char ans;
+        char answer=0;
         int output_way=0;
         while(1){
-            printf("\nDo you want to save the output to output.txt? (Y/N)\n");
-            scanf(" %c", &ans);
-            if(ans=='N'){
+            printf("\nDo you want to save the output to output.txt? (Y/N)\n>");
+            scanf(" %c", &answer);
+            if(answer=='Y'){
                 output_way=1;
                 break;
             }
-            else if(ans=='Y')
+            else if(answer=='N')
                 break;
             else{
                 printf("USAGE : selecet Y or N\n");
@@ -146,49 +158,49 @@ void display(void){
         for(int i=0;i<=index;i++){
             switch (simulator_num[i]) {
                 case '1':
-                    OPTIMAL(ref);
+                    OPTIMAL(ref, output_way, fp);
                     continue;
                 case '2':
-                    FIFO(ref);
+                    FIFO(ref, output_way, fp);
                     continue;
                 case '3':
-                    LIFO(ref);
+                    LIFO(ref, output_way, fp);
                     continue;
                 case '4':
-                    LRU(ref);
+                    LRU(ref, output_way, fp);
                     continue;
                 case '5':
-                    LFU(ref);
+                    LFU(ref, output_way, fp);
                     continue;
                 case '6':
-                    SC(ref);
+                    SC(ref, output_way, fp);
                     continue;
                 case '7':
-                    ESC(esc_ref);
+                    ESC(esc_ref, output_way, fp);
                     continue;
                 case '8':
-                    OPTIMAL(ref);
-                    FIFO(ref);
-                    LIFO(ref);
-                    LRU(ref);
-                    LFU(ref);
-                    SC(ref);
-                    ESC(esc_ref);
+                    OPTIMAL(ref, output_way, fp);
+                    FIFO(ref, output_way, fp);
+                    LIFO(ref, output_way, fp);
+                    LRU(ref, output_way, fp);
+                    LFU(ref, output_way, fp);
+                    SC(ref, output_way, fp);
+                    ESC(esc_ref, output_way, fp);
                     break;
             }
         }
         
-        char answer;
+        answer=0;
         int exit_flag=0;
         while(1){
-            printf("Do you want to be continue the simulator? (Y/N)\n");
+            printf("Do you want to be continue the simulator? (Y/N)\n>");
             scanf(" %c", &answer);
-            if(answer=='N'){
+            if(answer=='Y')
+                break;
+            else if(answer=='N'){
                 exit_flag=1;
                 break;
             }
-            else if(answer=='Y')
-                break;
             else{
                 printf("USAGE : selecet Y or N\n");
             }

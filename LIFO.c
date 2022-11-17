@@ -8,17 +8,21 @@
 
 #include "LIFO.h"
 
-extern int STREAM_SIZE;
+extern int REF_SIZE;
 extern int FRAME_SIZE;
 
-void LIFO(int* ref){
+void LIFO(int* ref, int output_flag, FILE* fp){
     printf("\n\n==LIFO simulation start==\n\n");
+    
+    if(output_flag)
+        fprintf(fp, "\n\n==LIFO simulation start==\n\n");
+    
     int page_fault=0;
     
     int* frame = (int*) calloc(FRAME_SIZE, sizeof(int));
     
     int frame_size=0,flag=0;
-    for(int i=0;i<STREAM_SIZE;i++){
+    for(int i=0;i<REF_SIZE;i++){
         flag=0;
         
         if(is_exist(frame, ref[i])==NOTFOUND){
@@ -33,16 +37,33 @@ void LIFO(int* ref){
         }
         
         printf("#%-5d page : %-3d   frame :", i+1, ref[i]);
-        print_frame(frame);
         
-        if(flag)
+        if(output_flag)
+            fprintf(fp, "#%-5d page : %-3d   frame :", i+1, ref[i]);
+        
+        print_frame(frame, fp, output_flag);
+        
+        if(flag){
             printf("%5c\n", 'F');
-        else
+            
+            if(output_flag)
+                fprintf(fp, "%5c\n", 'F');
+        }
+        else{
             printf("%5c\n", ' ');
+            
+            if(output_flag)
+                fprintf(fp, "%5c\n", ' ');
+        }
     }
     
     free(frame);
     
     printf("\nTotal number of page fault %d\n", page_fault);
-    printf("==LIFO simulation end==\n\n");
+    printf("==LIFO simulation end==\n\n\n");
+    
+    if(output_flag){
+        fprintf(fp, "\nTotal number of page fault %d\n", page_fault);
+        fprintf(fp, "==LIFO simulation end==\n\n\n");
+    }
 }

@@ -11,6 +11,6 @@
 #include <stdio.h>
 #include "tools.h"
 
-void LIFO(int* ref);
+void LIFO(int* ref, int output_flag, FILE* fp);
 
 #endif /* LIFO_h */

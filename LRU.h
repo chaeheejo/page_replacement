@@ -11,6 +11,6 @@
 #include <stdio.h>
 #include "tools.h"
 
-void LRU(int* ref);
+void LRU(int* ref, int output_flag, FILE* fp);
 
 #endif /* LRU_h */

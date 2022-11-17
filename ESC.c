@@ -8,11 +8,15 @@
 
 #include "ESC.h"
 
-extern int STREAM_SIZE;
+extern int REF_SIZE;
 extern int FRAME_SIZE;
 
-void ESC(int* ref){
+void ESC(int* ref, int output_flag, FILE* fp){
     printf("\n==ESC simulation start==\n\n");
+    
+    if(output_flag)
+        fprintf(fp, "\n\n==ESC simulation start==\n\n");
+    
     int page_fault=0;
     
     int** frame = (int**) calloc(FRAME_SIZE, sizeof(int*));
@@ -20,31 +24,31 @@ void ESC(int* ref){
         frame[i] = (int*) calloc(3, sizeof(int));
     }
     
-    int flag=0;
+    int flag=0, frame_size=0;
     int cur=0, hit_index=0;
     
     int i=0, ref_cur=0, bit_cur=0;
-    while(i<STREAM_SIZE*2){
+    while(i<REF_SIZE*2){
         flag=0;
         ref_cur = ref[i];
         bit_cur = ref[++i];
         if((hit_index=is_exist_dimension(frame, ref_cur))==NOTFOUND){
-            if(cur<FRAME_SIZE){
-                frame[cur][0] = ref_cur;
-                cur = (cur+1)%FRAME_SIZE;
+            if(frame_size<FRAME_SIZE){
+                frame[frame_size][0] = ref_cur;
+                frame_size++;
                 
-                if(bit_cur==0){ //read
+                if(bit_cur==0){
                     frame[cur][1] = 1;
                 }
-                else{ //write
+                else{
                     frame[cur][2] = 1;
                 }
                 flag=1;
                 page_fault++;
+                cur = (cur+1)%FRAME_SIZE;
             }
             else{
                 int low_page = lowest_priority(frame, cur);
-                printf("low_page is %d\n", low_page);
                 frame[low_page][0] = ref_cur;
                 frame[low_page][1] = 0;
                 frame[low_page][2] = 0;
@@ -60,7 +64,7 @@ void ESC(int* ref){
                 page_fault++;
             }
         }
-        else{
+        else{  
             if(bit_cur==0){
                 frame[hit_index][1] = 1;
             }
@@ -72,18 +76,42 @@ void ESC(int* ref){
         
         printf("#%-5d page : %-3d  ", i/2, ref_cur);
         
-        if(bit_cur==0)
+        if(output_flag)
+            fprintf(fp, "#%-5d page : %-3d  ", i/2, ref[i]);
+        
+        
+        if(bit_cur==0){
             printf("bit : R");
-        else
+            
+            if(output_flag)
+                fprintf(fp, "bit : R");
+        }
+        else{
             printf("bit : W");
+            
+            if(output_flag)
+                fprintf(fp, "bit : W");
+        }
         
         printf("   frame : ");
-        print_frame_dimension(frame);
         
-        if(flag)
+        if(output_flag)
+            fprintf(fp, "   frame : ");
+            
+        print_frame_dimension(frame, fp, output_flag);
+        
+        if(flag){
             printf("%5c\n", 'F');
-        else
+            
+            if(output_flag)
+                fprintf(fp, "%5c\n", 'F');
+        }
+        else{
             printf("%5c\n", ' ');
+            
+            if(output_flag)
+                fprintf(fp, "%5c\n", ' ');
+        }
     }
     
     for(int i=0;i<FRAME_SIZE;i++){
@@ -93,5 +121,10 @@ void ESC(int* ref){
     free(frame);
     
     printf("\nTotal number of page fault %d\n", page_fault);
-    printf("==ESC simulation end==\n\n");
+    printf("==ESC simulation end==\n\n\n");
+    
+    if(output_flag){
+        fprintf(fp, "\nTotal number of page fault %d\n", page_fault);
+        fprintf(fp, "==ESC simulation end==\n\n\n");
+    }
 }

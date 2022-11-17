@@ -11,6 +11,6 @@
 #include <stdio.h>
 #include "tools.h"
 
-void LFU(int* ref);
+void LFU(int* ref, int output_flag, FILE* fp);
 
 #endif /* LFU_h */
