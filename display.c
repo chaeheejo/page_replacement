@@ -155,7 +155,7 @@ void display(void){
             }
         }
         
-        for(int i=0;i<=index;i++){
+        for(int i=0;i<index;i++){
             switch (simulator_num[i]) {
                 case '1':
                     OPTIMAL(ref, output_way, fp);
