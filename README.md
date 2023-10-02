@@ -52,3 +52,8 @@ Do you want to be continue the simulator? (Y/N)
 
 ### algorithm description:
 [page_replacement_algorithm](https://blog.naver.com/60cogml/222932944795)
+
+<br/>
+
+### report
+[report](https://github.com/chaeheejo/page_replacement/blob/main/report.pdf)
